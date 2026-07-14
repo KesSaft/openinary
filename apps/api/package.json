@@ -9,7 +9,10 @@
     "start": "node dist/server.js",
     "lint": "eslint src --ext .ts",
     "type-check": "tsc --noEmit",
-    "test": "node --import tsx --test $(find src -name '*.test.ts')"
+    "test:base": "node --import tsx --test $(find src -name '*.test.ts')",
+    "test:api:nostart": "node --import tsx --test $(find tests/api -name '*.test.ts')",
+    "test:api": "pnpm run build && concurrently -k --prefix none --hide 0 \"pnpm run start\" \"wait-on http://localhost:3000 && pnpm run test:api:nostart\"",
+    "test": "pnpm run test:base && pnpm run test:api"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.855.0",
@@ -37,8 +40,10 @@
     "@types/node": "^24.2.0",
     "@typescript-eslint/eslint-plugin": "^8",
     "@typescript-eslint/parser": "^8",
+    "concurrently": "^10.0.3",
     "eslint": "^9",
     "tsx": "^4.7.0",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "wait-on": "^9.0.10"
   }
 }
