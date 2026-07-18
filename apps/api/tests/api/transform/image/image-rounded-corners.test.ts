@@ -17,7 +17,7 @@ interface TestCase {
 
 const testCases: TestCase[] = [
   {
-    name: "Image without rotating",
+    name: "Image original",
     path: "/t/example-loan.jpg",
     expected: {
       code: 200,
@@ -27,78 +27,88 @@ const testCases: TestCase[] = [
     },
   },
   {
-    name: "Image rotated 90°",
-    path: "/t/a_90/example-loan.jpg",
+    name: "Image 100 roundness all around",
+    path: "/t/r_100/example-loan.jpg",
     expected: {
       code: 200,
-      width: 2400,
+      width: 1536,
       height: 1920,
-      hash: "cecca16b72f3d7cee4dd89acdf7b103d58cc2c2a658f90fc852af2bf9f94a509",
+      hash: "94b6b17903267d347519a69553da05188801f7e90c16de2d4a3873b1a064ceb2",
     },
   },
   {
-    name: "Image rotated -90°",
-    path: "/t/a_-90/example-loan.jpg",
+    name: "Image diagonal different rounded",
+    path: "/t/r_40:200/example-loan.jpg",
     expected: {
       code: 200,
-      width: 2400,
+      width: 1536,
       height: 1920,
-      hash: "34f58e5b192cbaa6ffe441455b1b080dedac547d5c9a8beed14a899cfff1808f",
+      hash: "63671e3197e14bad2fa67a5c3f0a9f373317cc7bf29af1e0840f1ff464210a13",
     },
   },
   {
-    name: "Image rotated automatically",
-    path: "/t/a_auto/example-loan.jpg",
+    name: "Image three different rounded counters",
+    path: "/t/r_40:120:200/example-loan.jpg",
     expected: {
       code: 200,
-      width: 1920,
-      height: 2400,
-      hash: "52f291fd0e3a4d9ed50fa3414953ff563bccf540d7d5cf56de15e56b799b26ee",
-    },
-  },
-  {
-    name: "Image rotated 810° => 90°",
-    path: "/t/a_810/example-loan.jpg",
-    expected: {
-      code: 200,
-      width: 2400,
+      width: 1536,
       height: 1920,
-      hash: "cecca16b72f3d7cee4dd89acdf7b103d58cc2c2a658f90fc852af2bf9f94a509",
+      hash: "513e0f4139e90ee0c257efec27337fdfc4bda2c265a50c1de05f5639291661a8",
     },
   },
   {
-    name: "Image rotated 50°",
-    path: "/t/a_50/example-loan.jpg",
+    name: "Image all four rounded differently",
+    path: "/t/r_40:100:150:200/example-loan.jpg",
     expected: {
       code: 200,
-      width: 3073,
-      height: 3013,
-      hash: "3d24025044517d0bdb29914bc6e91c772f059980f80420067c042b29d15ac924",
+      width: 1536,
+      height: 1920,
+      hash: "046a073705891be277eb45992ec547ce566ce5586adbef420c3c3eb0eb59f0e0",
     },
   },
   {
-    name: "Image rotated 70° with red background",
-    path: "/t/a_50,b_rgb:ff0000/example-loan.jpg",
+    name: "Image round max",
+    path: "/t/r_max/example-loan.jpg",
     expected: {
       code: 200,
-      width: 3073,
-      height: 3013,
-      hash: "2caf2cc9447540d4b6a094e99be3228239359b83eaacee2f2fc6d25370a3d526",
+      width: 1536,
+      height: 1920,
+      hash: "31f25e4732d061cd8c9efd2fe12470aa72232663f81d4ad8deeeb10e558b314f",
     },
   },
   {
-    name: "Invalid image rotation",
-    path: "/t/a_left/example-loan.jpg",
+    name: "Image round max with red background",
+    path: "/t/r_max,b_rgb:ff0000/example-loan.jpg",
+    expected: {
+      code: 200,
+      width: 1536,
+      height: 1920,
+      hash: "dbac5b4a6fcab4aca147a8635fffa6b8de594df5d93b9e64a3d986b485aa4ebd",
+    },
+  },
+  {
+    name: "Image invalid roudness",
+    path: "/t/r_invalid/example-loan.jpg",
     expected: {
       code: 404,
-      width: 3073,
-      height: 3013,
-      hash: "---",
+      width: 1536,
+      height: 1920,
+      hash: "",
+    },
+  },
+  {
+    name: "Image invalid amount roudness parameters",
+    path: "/t/r_10:20:30:40:50/example-loan.jpg",
+    expected: {
+      code: 404,
+      width: 1536,
+      height: 1920,
+      hash: "",
     },
   },
 ];
 
-suite("Image rotation tests", () => {
+suite("Image rounded corners tests", () => {
   for (const imageCase of testCases) {
     test(imageCase.name, async () => {
       const response = await TestHelper.APIRequest(imageCase.path);
